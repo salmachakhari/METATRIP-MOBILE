@@ -13,31 +13,31 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class AbonnementService {
+public class HotelService {
 
-    public static AbonnementService instance = null;
+    public static HotelService instance = null;
     public int resultCode;
     private ConnectionRequest cr;
-    private ArrayList<Abonnement> listAbonnements;
+    private ArrayList<Hotel> listHotels;
 
     
 
-    private AbonnementService() {
+    private HotelService() {
         cr = new ConnectionRequest();
     }
 
-    public static AbonnementService getInstance() {
+    public static HotelService getInstance() {
         if (instance == null) {
-            instance = new AbonnementService();
+            instance = new HotelService();
         }
         return instance;
     }
     
-    public ArrayList<Abonnement> getAll() {
-        listAbonnements = new ArrayList<>();
+    public ArrayList<Hotel> getAll() {
+        listHotels = new ArrayList<>();
 
         cr = new ConnectionRequest();
-        cr.setUrl(Statics.BASE_URL + "/abonnement");
+        cr.setUrl(Statics.BASE_URL + "/hotel");
         cr.setHttpMethod("GET");
 
         cr.addResponseListener(new ActionListener<NetworkEvent>() {
@@ -45,7 +45,7 @@ public class AbonnementService {
             public void actionPerformed(NetworkEvent evt) {
 
                 if (cr.getResponseCode() == 200) {
-                    listAbonnements = getList();
+                    listHotels = getList();
                 }
 
                 cr.removeResponseListener(this);
@@ -59,10 +59,10 @@ public class AbonnementService {
             e.printStackTrace();
         }
 
-        return listAbonnements;
+        return listHotels;
     }
 
-    private ArrayList<Abonnement> getList() {
+    private ArrayList<Hotel> getList() {
         try {
             Map<String, Object> parsedJson = new JSONParser().parseJSON(new CharArrayReader(
                     new String(cr.getResponseData()).toCharArray()
@@ -70,52 +70,62 @@ public class AbonnementService {
             List<Map<String, Object>> list = (List<Map<String, Object>>) parsedJson.get("root");
 
             for (Map<String, Object> obj : list) {
-                Abonnement abonnement = new Abonnement(
+                Hotel hotel = new Hotel(
                         (int) Float.parseFloat(obj.get("id").toString()),
                         
-                        (String) obj.get("type"),
-                        (int) Float.parseFloat(obj.get("prix").toString()),
-                        new SimpleDateFormat("dd-MM-yyyy").parse((String) obj.get("dateAchat")),
-                        new SimpleDateFormat("dd-MM-yyyy").parse((String) obj.get("dateExpiration")),
-                        (String) obj.get("etat")
+                        (String) obj.get("nom"),
+                        (int) Float.parseFloat(obj.get("nbEtoiles").toString()),
+                        (String) obj.get("image"),
+                        (String) obj.get("adresse")
                         
                 );
 
-                listAbonnements.add(abonnement);
+                listHotels.add(hotel);
             }
-        } catch (IOException | ParseException e) {
+        } catch (IOException  e) {
             e.printStackTrace();
         }
-        return listAbonnements;
+        return listHotels;
     }
     
-    public int add(Abonnement abonnement) {
-        return manage(abonnement, false);
+    public int add(Hotel hotel) {
+        return manage(hotel, false, true);
     }
 
-    public int edit(Abonnement abonnement) {
-        return manage(abonnement, true );
+    public int edit(Hotel hotel, boolean imageEdited) {
+        return manage(hotel, true , imageEdited);
     }
 
-    public int manage(Abonnement abonnement, boolean isEdit) {
+    public int manage(Hotel hotel, boolean isEdit, boolean imageEdited) {
         
-        cr = new ConnectionRequest();
+        MultipartRequest cr = new MultipartRequest();
+        cr.setFilename("file", "Hotel.jpg");
 
         
         cr.setHttpMethod("POST");
         if (isEdit) {
-            cr.setUrl(Statics.BASE_URL + "/abonnement/edit");
-            cr.addArgument("id", String.valueOf(abonnement.getId()));
+            cr.setUrl(Statics.BASE_URL + "/hotel/edit");
+            cr.addArgumentNoEncoding("id", String.valueOf(hotel.getId()));
         } else {
-            cr.setUrl(Statics.BASE_URL + "/abonnement/add");
+            cr.setUrl(Statics.BASE_URL + "/hotel/add");
         }
+
+        if (imageEdited) {
+            try {
+                cr.addData("file", hotel.getImage(), "image/jpeg");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            cr.addArgumentNoEncoding("image", hotel.getImage());
+        }
+
+        cr.addArgumentNoEncoding("nom", hotel.getNom());
+        cr.addArgumentNoEncoding("nbEtoiles", String.valueOf(hotel.getNbEtoiles()));
+        cr.addArgumentNoEncoding("image", hotel.getImage());
+        cr.addArgumentNoEncoding("adresse", hotel.getAdresse());
         
-        cr.addArgument("type", abonnement.getType());
-        cr.addArgument("prix", String.valueOf(abonnement.getPrix()));
-        cr.addArgument("dateAchat", new SimpleDateFormat("dd-MM-yyyy").format(abonnement.getDateAchat()));
-        cr.addArgument("dateExpiration", new SimpleDateFormat("dd-MM-yyyy").format(abonnement.getDateExpiration()));
-        cr.addArgument("etat", abonnement.getEtat());
-        
+
         
         cr.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
@@ -133,11 +143,11 @@ public class AbonnementService {
         return resultCode;
     }
 
-    public int delete(int abonnementId) {
+    public int delete(int hotelId) {
         cr = new ConnectionRequest();
-        cr.setUrl(Statics.BASE_URL + "/abonnement/delete");
+        cr.setUrl(Statics.BASE_URL + "/hotel/delete");
         cr.setHttpMethod("POST");
-        cr.addArgument("id", String.valueOf(abonnementId));
+        cr.addArgument("id", String.valueOf(hotelId));
 
         cr.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override

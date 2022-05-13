@@ -7,7 +7,7 @@ import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.*;
 import com.codename1.io.*;
 import com.metatrip.entities.Hotel;
-import com.metatrip.gui.HotelService;
+import com.metatrip.services.HotelService;
 import com.metatrip.utils.Statics;
 
 import java.text.SimpleDateFormat;

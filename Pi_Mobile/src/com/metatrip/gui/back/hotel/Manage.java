@@ -1,7 +1,6 @@
 package com.metatrip.gui.back.hotel;
 
 
-import com.metatrip.gui.HotelService;
 import com.codename1.capture.Capture;
 import com.codename1.components.ImageViewer;
 

@@ -31,7 +31,6 @@ public class MainApp {
             return;
         }
         new Login().show();
-        
     }
 
     public void stop() {

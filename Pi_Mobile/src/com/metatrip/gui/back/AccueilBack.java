@@ -6,20 +6,10 @@ import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
-import com.metatrip.gui.AddForm;
-import com.metatrip.gui.ListArticle;
-import com.metatrip.gui.ListVoyagesForm;
-import com.metatrip.gui.ListVoyagesOForm;
 import com.metatrip.gui.Login;
-import com.metatrip.gui.StatistiquePieForm;
-import com.metatrip.gui.Statzarga;
-import com.metatrip.gui.VoyageAddGUI;
-import com.metatrip.gui.back.user.AddusersForm;
-import com.metatrip.gui.listuser;
 
 public class AccueilBack extends Form {
-Resources res;
-   com.codename1.ui.Form current;
+
     Resources theme = UIManager.initFirstTheme("/theme");
     Label label;
 
@@ -52,13 +42,43 @@ Resources res;
                 makeHotelsButton(), 
                 makeChauffeursButton(), 
                 makeAbonnementsButton(),
-                makeuserButton(),
-                  makelistvoyageButton(),  makeaddvoyageButton(), StatistiquePieButton(),VoyageOButton(),    addEventbutton() ,Eventbutton(),statEventbutton()
+                makeVoyageButton(),
+                MakeVoyageOrganiseButton() ,
+                MakeStatOrganiseButton(),
+                makeUserButton() 
+                
         );
 
         this.add(menuContainer);
     }
-
+ private Button makeVoyageButton() {
+        Button button = new Button("Voyage");
+        button.setUIID("buttonMenu");
+        //button.setMaterialIcon(FontImage.MATERIAL_BOOKMARK);
+        button.addActionListener(action -> new com.metatrip.gui.back.hotel.ShowAll(this).show());
+        return button;
+    }
+ private Button MakeVoyageOrganiseButton() {
+        Button button = new Button("Voyage Organisé");
+        button.setUIID("buttonMenu");
+        //button.setMaterialIcon(FontImage.MATERIAL_BOOKMARK);
+        button.addActionListener(action -> new com.metatrip.gui.back.hotel.ShowAll(this).show());
+        return button;
+    }
+  private Button MakeStatOrganiseButton() {
+        Button button = new Button("Statistique");
+        button.setUIID("buttonMenu");
+        //button.setMaterialIcon(FontImage.MATERIAL_BOOKMARK);
+        button.addActionListener(action -> new com.metatrip.gui.back.hotel.ShowAll(this).show());
+        return button;
+    }
+ private Button makeUserButton() {
+        Button button = new Button("User");
+        button.setUIID("buttonMenu");
+        //button.setMaterialIcon(FontImage.MATERIAL_BOOKMARK);
+        button.addActionListener(action -> new com.metatrip.gui.back.hotel.ShowAll(this).show());
+        return button;
+    }
     private Button makeHotelsButton() {
         Button button = new Button("Hotels");
         button.setUIID("buttonMenu");
@@ -80,71 +100,5 @@ Resources res;
         button.addActionListener(action -> new com.metatrip.gui.back.abonnement.ShowAll(this).show());
         return button;
     }
-        private Button makeuserButton() {
-        Button button = new Button("user");
-        button.setUIID("buttonMenu");
-        //button.setMaterialIcon(FontImage.MATERIAL_BOOKMARK);
-        button.addActionListener(action -> new  listuser(current).show());
-        return button;
-    }
-          private Button makelistvoyageButton() {
-        Button button = new Button("voyage ");
-        button.setUIID("buttonMenu");
-        //button.setMaterialIcon(FontImage.MATERIAL_BOOKMARK);
-        button.addActionListener(action ->   new ListVoyagesForm(current).show());
-        return button;
-    } 
-      
-         private Button makeaddvoyageButton() {
-        Button button = new Button("add voyage ");
-        button.setUIID("buttonMenu");
-        //button.setMaterialIcon(FontImage.MATERIAL_BOOKMARK);
-        button.addActionListener(action ->   new VoyageAddGUI(current).show());
-        return button;
-    } 
-        private Button StatistiquePieButton() {
-        Button button = new Button("Statistique voyage ");
-        button.setUIID("buttonMenu");
-        //button.setMaterialIcon(FontImage.MATERIAL_BOOKMARK);
-        button.addActionListener(action ->   new StatistiquePieForm(res).show());
-        return button;
-    }   
-          private Button VoyageOButton() {
-        Button button = new Button(" voyage Organisé ");
-        button.setUIID("buttonMenu");
-        //button.setMaterialIcon(FontImage.MATERIAL_BOOKMARK);
-        button.addActionListener(action ->   new ListVoyagesOForm(current).show());
-        return button;
-    }  
-      
-             private Button Eventbutton() {
-        Button button = new Button(" list  Event ");
-        button.setUIID("buttonMenu");
-        //button.setMaterialIcon(FontImage.MATERIAL_BOOKMARK);
-        button.addActionListener(action ->  new ListArticle(current).show());
-        return button;
-    }  
-                  private Button addEventbutton() {
-        Button button = new Button(" add Event ");
-        button.setUIID("buttonMenu");
-        //button.setMaterialIcon(FontImage.MATERIAL_BOOKMARK);
-      //  button.addActionListener(action ->  new AddForm(current).show());
-        return button;
-    }  
-                   private Button statEventbutton() {
-        Button button = new Button(" stat  Event ");
-        button.setUIID("buttonMenu");
-        //button.setMaterialIcon(FontImage.MATERIAL_BOOKMARK);
-        button.addActionListener(action ->  new Statzarga(res).show());
-        return button;
-    }  
-           
-          
-       // btnListTasks.addActionListener(e-> new ListVoyagesForm(current).show());
-//                btnListVOTasks.addActionListener(e-> new ListVoyagesOForm(current).show());
-
-        
-  //              btnAddTask.addActionListener(e-> new VoyageAddGUI(current).show());
-     //          btnStat.addActionListener(e-> new StatistiquePieForm(res).show());
-
+    
 }
